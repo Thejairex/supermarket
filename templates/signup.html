@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+<main>
+    {% with messages = get_flashed_messages(with_categories=True) %} 
+        {% if messages %}
+            {% for category, message in messages %}
+            <!-- if messages is error -->
+                {% if category == 'error' %}
+                    <div class="alert alert-dismissible alert-danger" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        {{ message }}
+                    </div>
+                {% endif %}
+
+                {% if category == 'success' %}
+                    <div class="alert alert-dismissible alert-success" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        {{ message }}
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <!-- center the form and round the corners with border -->
+
+    <div class="d-flex justify-content-center my-5">
+        <form action="{{ url_for('signup') }}" method="POST" class="border border-1 border-dark rounded-3 p-3 ">
+            <legend class="display-4 text-center text-primary">Sign Up</legend>
+
+            <div class="mb-3">
+                <label for="username" class="form-label text-primary">Username</label>
+                <input type="text" class="form-control rounded-4" id="username" name="username">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label text-primary">Password</label>
+                <input type="password" class="form-control rounded-4" id="password" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary rounded-4">Sign Up</button>
+        </form>
+
+    </div>
+    
+</main>
+
+{% endblock content %}
