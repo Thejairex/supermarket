@@ -35,7 +35,7 @@ def signup():
         user = db.get_by_column(User, 'username', username)
         if user:
             flash('Username already exists', 'error')
-            return redirect(url_for('signup'))
+            return redirect(url_for('auth.signup'))
 
         user = User(
             username = username,
@@ -45,6 +45,6 @@ def signup():
         
         db.add(user)
         flash('Signup successful. Please login', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
 
     return render_template('signup.html')

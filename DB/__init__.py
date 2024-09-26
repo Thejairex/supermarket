@@ -26,6 +26,8 @@ class DB:
     def get_last_record(self, model):
         return self.session.query(model).order_by(model.product_id.desc()).first()
         
+    def delete_record(self, model, column, value):
+        self.session.query(model).filter(getattr(model, column) == value).delete()
         
     def commit(self):
         self.session.commit()
