@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<main>
+<main class="container-fluid mt-3">
 
     <div class="row">
         <div class="col-6">
-            <h1>Products</h1>
-            
+            <h1 class="display-4 ps-1 pt-1">Products</h1>
+
         </div>
-        <div class="col-6 text-end p-0">
+        <div class="col-6 align-items-center d-flex">
             {% if current_user.is_authenticated and current_user.role == 'admin' %}
-            <a href="{{ url_for('products.add_product') }}" class="btn btn-success mb-3">Add Product</a>
+            <a href="{{ url_for('products.add_product') }}" class="btn btn-success ms-auto">Add Product</a>
             {% endif %}
         </div>
         <!-- filter table -->
@@ -19,15 +19,36 @@
     <div class="row">
         <div class="col-6 offset-3">
             <form action="{{ url_for('products.products') }}" method="POST">
-                <!-- dropdown filter -->
-                <div class="input-group mb-3">
-                    <select class="form-select" name="category_id">
-                        <option value="" selected>All</option>
-                        {% for category in categories %}
-                        <option value="{{ category.category_id }}">{{ category.category }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="submit" class="btn btn-primary">Filter</button>
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                        <!-- dropdown filter -->
+                        <label class="form-label mb-0" for="category_id">Category</label>
+                    </div>
+                    <div class="col-auto">
+                        <select class="form-select bg-primary text-white" name="category_id">
+                            <option value="" selected>All</option>
+                            {% for category in categories %}
+                            <option value="{{ category.category_id }}">{{ category.category }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- order filter -->
+                     <div class="col-auto">
+                        <label class="form-label mb-0" for="order_by">Order By</label>
+                     </div>
+                    <div class="col-auto ">
+                        <select class="form-select bg-dark text-white" name="order_by">
+                            <option value="" selected>All</option>
+                            <option value="product">Product</option>
+                            <option value="category">Category</option>
+                            <option value="cost_unit">Cost</option>
+                            <option value="inflation_rate">Inflation</option>
+                            <option value="price">Price</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -55,10 +76,10 @@
                 <td>{{ product.price }}</td>
                 {% if current_user.is_authenticated and current_user.role == 'admin' %}
                 <td>
-                    <a href="{{ url_for('products.edit_product', product_id=product.product_id) }}" class="btn btn-info"><i
-                            class="fa fa-edit"></i></a>
-                    <a href="{{ url_for('products.delete_product', product_id=product.product_id) }} " class="btn btn-danger"><i
-                            class="fa fa-trash"></i></a>
+                    <a href="{{ url_for('products.edit_product', product_id=product.product_id) }}"
+                        class="btn btn-info"><i class="fa fa-edit"></i></a>
+                    <a href="{{ url_for('products.delete_product', product_id=product.product_id) }} "
+                        class="btn btn-danger"><i class="fa fa-trash"></i></a>
                 </td>
                 {% endif %}
             </tr>

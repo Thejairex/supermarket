@@ -8,6 +8,19 @@ db = DB()
 
 @products_bp.route('/', methods=['GET', 'POST'])
 def products():
+    if request.method == 'POST':
+        category_id = request.form['category_id']
+        order_by = request.form['order_by']
+        
+        if category_id and category_id != 'All':
+            products = db.get_where(Product, 'category_id', category_id, order_by=order_by)
+            
+        else:
+            products = db.get_all(Product, order_by=order_by)
+        
+        categories = db.get_all(Category)
+        return render_template('products.html', products=products,categories=categories)        
+    
     products = db.get_all(Product)
     categories = db.get_all(Category)
     return render_template('products.html', products=products,categories=categories)
@@ -30,7 +43,7 @@ def add_product():
 
 @products_bp.route('/edit_product/<int:product_id>', methods=['GET', 'POST'])
 def edit_product(product_id):
-    product = db.get_by_column(Product, 'product_id', product_id)
+    product = db.get_record(Product, 'product_id', product_id)
     if request.method == 'POST':
         product.product        = request.form['product']
         product.category_id    = request.form['category_id']

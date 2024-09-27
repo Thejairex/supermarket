@@ -11,7 +11,7 @@ auth_bp = Blueprint('auth', __name__)
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = db.get_by_column(User, 'username', request.form['username'])
+        user = db.get_record(User, 'username', request.form['username'])
         if user and check_password_hash(user.password, request.form['password']):
             login_user(user)
             flash('Login successful', 'success')
@@ -32,7 +32,7 @@ def logout():
 def signup():
     if request.method == 'POST':
         username = request.form['username']
-        user = db.get_by_column(User, 'username', username)
+        user = db.get_record(User, 'username', username)
         if user:
             flash('Username already exists', 'error')
             return redirect(url_for('auth.signup'))

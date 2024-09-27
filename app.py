@@ -24,7 +24,7 @@ app.register_blueprint(user_bp, url_prefix='/')
 
 @login_manger.user_loader
 def load_user(user_id):
-    return db.get_by_column(User, 'user_id', user_id)
+    return db.get_record(User, 'user_id', user_id)
 
 
 @app.route('/')
@@ -36,4 +36,4 @@ def statistics():
     return render_template('statistics.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
