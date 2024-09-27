@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-
+import sqlalchemy
 from DB import DB
-from DB.models import Product, Category
+from DB.models import Product, Category, Box
 
 products_bp = Blueprint('products', __name__)
 db = DB()
@@ -28,18 +28,48 @@ def products():
 @products_bp.route('/add_product', methods=['GET', 'POST'])
 def add_product():
     if request.method == 'POST':
+        product        = str(request.form['product'])
+        category_id    = int(request.form['category_id'])
+        stand          = str(request.form['stand'])
+        cost_unit      = float(request.form['cost_unit'])
+        inflation_rate = float(request.form['inflation_rate'])
+        quantity       = int(request.form['quantity'])
+        
+        price = round(round((cost_unit * ( 1 + inflation_rate / 100)), 2) * 1.4, 1)
+        
         product = Product(
-            product        = request.form['product'],
-            category_id    = request.form['category_id'],
-            cost_unit      = request.form['cost_unit'],
-            inflation_rate = request.form['inflation_rate'],
-            price          = request.form['price']
+            product        = product,
+            category_id    = category_id,
+            stand          = stand,
+            cost_unit      = cost_unit,
+            inflation_rate = inflation_rate,
+            price          = price
         )
-        db.add(product)
+        try:
+            db.add(product)
+        except sqlalchemy.exc.IntegrityError as e:
+            e = str(e)
+            if 'UNIQUE constraint failed: products.product' in e:
+                flash('El producto ya existe', 'error')
+            else:
+                flash('Error al agregar producto', 'error')
+        
+        try:
+            box = Box(
+                product_id = db.get_last_record(Product).product_id,
+                quantity = quantity,
+                price_per_box = (request.form['cost_unit'] * request.form['quantity']),
+            )
+            db.add(box)
+        except sqlalchemy.exc.IntegrityError as e:
+            e = str(e)
+            if 'UNIQUE constraint failed: boxes.product_id' in e:
+                flash('La Caja ya existe', 'error')
+            else:
+                flash('Error al agregar Caja', 'error')
         
         return redirect(url_for('products_bp.products'))
     
-    return render_template('add_product.html')
 
 @products_bp.route('/edit_product/<int:product_id>', methods=['GET', 'POST'])
 def edit_product(product_id):

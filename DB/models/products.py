@@ -9,6 +9,7 @@ class Product(Base):
     product_id = Column(Integer, primary_key=True, autoincrement=True)
     product = Column(String(150), unique=True, nullable=False)
     category_id = Column(Integer, ForeignKey('categories.category_id'))
+    stand = Column(String(150), nullable=False)
     cost_unit = Column(Float, nullable=False)
     inflation_rate = Column(Float, nullable=False)
     price = Column(Float, nullable=False)

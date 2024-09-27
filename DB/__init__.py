@@ -92,8 +92,17 @@ class DB:
     def get_record(self, model, column, value):
         return self.session.query(model).filter(getattr(model, column) == value).first()
     
-    def get_last_record(self, model):
-        return self.session.query(model).order_by(model.model_id.desc()).first()
+    def get_last_record(self, model, column_id="id"):
+        """
+        Gets the last model object from the database.
+        
+        args:
+            model: The model object to be added to the database (Base).
+            column_id: The column name to be used for ordering by id (default is "id").
+            
+        returns: The last model object in the database.
+        """
+        return self.session.query(model).order_by(model.column_id.desc()).first()
 
     def get_where_record(self, model, column, value, order_by=None, order="desc"):
         """
