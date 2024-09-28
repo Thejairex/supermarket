@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% extends "modals.html" %}
 
 {% block content %}
 <main class="container-fluid mt-3">
@@ -11,17 +12,23 @@
         <div class="col-6 align-items-center d-flex justify-content-end">
             {% if current_user.is_authenticated and current_user.role == 'admin' %}
             <!-- form to add product modal -->
+            
             <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#addProduct">Add Product</button>
+            <button type="button" class="btn btn-info ms-2" data-bs-toggle="modal" data-bs-target="#addCategory">Add Category</button>
+
+            <!-- modal to add product -->
             <div class="modal fade " id="addProduct" aria-hidden="true" aria-labelledby="addProductLabel" tabindex="1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Add Product</h5>
+                            <h5 class="modal-title">
+                                Add New Product
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ url_for('products.add_product') }}" method="POST">
+                            <form action=" " method="POST">
                                 <div class="mb-3">
                                     <label for="product" class="form-label">Name Product</label>
                                     <input type="text" class="form-control" id="product" name="product" required>
@@ -34,14 +41,14 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div  class="mb-3">
+                                <div class="mb-3">
                                     <label for="stand" class="form-label">Stand</label>
                                     <select class="form-select" name="stand">
                                         <option value="Rack" selected>Rack</option>
                                         <option value="Fridge">Fridge</option>
                                         <option value="freezer">freezer</option>
                                     </select>
-
+            
                                 </div>
                                 <div class="mb-3">
                                     <label for="cost_unit" class="form-label">Cost Unit</label>
@@ -66,6 +73,8 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Modal Add Category -->
 
             {% endif %}
         </div>
@@ -93,7 +102,7 @@
                         <label class="form-label mb-0" for="order_by">Order By</label>
                      </div>
                     <div class="col-auto ">
-                        <select class="form-select bg-dark text-white" name="order_by">
+                        <select class="form-select bg-primary text-white" name="order_by">
                             <option value="" selected>All</option>
                             <option value="product">Product</option>
                             <option value="category">Category</option>
@@ -147,7 +156,7 @@
     </table>
     {% else %}
     
-    <h3 class="text-center">No Products Found</h3>
+    <h3 class="text-center mt-3">No Products Found</h3>
 
     {% endif %}
 
