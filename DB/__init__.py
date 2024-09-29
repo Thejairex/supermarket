@@ -34,7 +34,7 @@ class DB:
         self.session.add(model)
         self.commit()
         
-    def __order_by(self, query, order_by, order):
+    def __order_by(self, query, model, order_by, order):
         """
         Private method for ordering the query
         
@@ -46,10 +46,10 @@ class DB:
         returns: The ordered query.
         """
         if order == "asc":
-            return query.order_by(getattr(query, order_by))
+            return query.order_by(getattr(model, order_by))
 
         elif order == "desc":
-            return query.order_by(getattr(query, order_by).desc())
+            return query.order_by(getattr(model, order_by).desc())
 
     def get_all(self, model, order_by: str = None, order="asc"):
         """
@@ -62,10 +62,11 @@ class DB:
             
         returns: A list of model objects.
         """
+        print("order: ", order)
         query = self.session.query(model)
         
         if order_by:
-            query = self.__order_by(query, order_by, order)
+            query = self.__order_by(query, model, order_by, order)
             
         return query.all()
 
@@ -102,7 +103,7 @@ class DB:
             
         returns: The last model object in the database.
         """
-        return self.session.query(model).order_by(model.column_id.desc()).first()
+        return self.session.query(model).order_by(getattr(model, column_id).desc()).first()
 
     def get_where_record(self, model, column, value, order_by=None, order="desc"):
         """
@@ -125,12 +126,17 @@ class DB:
         
         return query.first()
 
-
-
     def delete_record(self, model, column, value):
         self.session.query(model).filter(
             getattr(model, column) == value).delete()
+        self.commit()
 
+    def update(self, model, column_id = "id"):
+        pass
+    
+    def rollback(self):
+        self.session.rollback()
+        
     def commit(self):
         self.session.commit()
 
