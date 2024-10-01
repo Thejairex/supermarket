@@ -4,32 +4,32 @@
 
 
 <main>
-    {% with messages = get_flashed_messages(with_categories=True) %} 
-        {% if messages %}
-            {% for category, message in messages %}
-            <!-- if messages is error -->
-                {% if category == 'error' %}
-                    <div class="alert alert-dismissible alert-danger" role="alert">
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        {{ message }}
-                    </div>
-                {% endif %}
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <!-- if messages is error -->
+    {% if category == 'error' %}
+    <div class="alert alert-dismissible alert-danger" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        {{ message }}
+    </div>
+    {% endif %}
 
-                {% if category == 'success' %}
-                    <div class="alert alert-dismissible alert-success" role="alert">
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        {{ message }}
-                    </div>
+    {% if category == 'success' %}
+    <div class="alert alert-dismissible alert-success" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        {{ message }}
+    </div>
 
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
     {% endwith %}
     <!-- center the form and round the corners with border -->
 
     <div class="d-flex justify-content-center my-5">
 
-        
+
         <form action="{{ url_for('auth.login') }}" method="POST" class="border border-1 border-dark rounded-3 p-3 ">
             <legend class="display-4 text-center text-primary">Login</legend>
 
@@ -45,7 +45,7 @@
         </form>
 
     </div>
-    
+
 </main>
 
 {% endblock content %}

@@ -5,12 +5,21 @@
 <main>
     {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
-    {% for message in messages %}
-    {% if 'success' in message %}
+    {% for category, message in messages %}
+    <!-- if messages is error -->
+    {% if category == 'error' %}
+    <div class="alert alert-dismissible alert-danger" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        {{ message }}
+    </div>
+    {% endif %}
+
+    {% if category == 'success' %}
     <div class="alert alert-dismissible alert-success" role="alert">
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         {{ message }}
     </div>
+
     {% endif %}
     {% endfor %}
     {% endif %}
@@ -44,15 +53,15 @@
             </div>
             <div class="col-4">
                 <a href="{{ url_for('products.products') }}" class="text-decoration-none">
-                <div class="card text-center text-primary rounded-4 bg-body-tertiary p-3 shadow-lg ">
-                    <div class="card-body">
-                        <h5 class="card-title display-5 m-0">Products</h5>
+                    <div class="card text-center text-primary rounded-4 bg-body-tertiary p-3 shadow-lg ">
+                        <div class="card-body">
+                            <h5 class="card-title display-5 m-0">Products</h5>
+                        </div>
                     </div>
-                </div>
                 </a>
             </div>
             <div class="col-4">
-                <a href="{{ url_for('statistics') }}" class="text-decoration-none">
+                <a href="#{{ url_for('statistics') }}" class="text-decoration-none " >
                     <div class="card text-center text-primary rounded-4 bg-body-tertiary p-3 shadow-lg">
                         <div class="card-body">
                             <h5 class="card-title display-5 m-0">Statistics</h5>
@@ -79,10 +88,10 @@
                         </div>
                     </div>
                 </a>
-            {% endif %}
-        </div>
+                {% endif %}
+            </div>
 
-    </div>
+        </div>
 </main>
 
 {% endblock content %}
