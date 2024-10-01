@@ -1,6 +1,7 @@
 # workless files
 Data/
 conv.py
+database.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
