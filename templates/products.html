@@ -200,13 +200,13 @@
                 <td>{{ product.price }}</td>
                 {% if current_user.is_authenticated and current_user.role == 'admin' %}
                 <td>
-                    <a type="button" data-bs-toggle="modal" data-bs-target="#editProductModal"
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#editProductModal{{ product.product_id }}"
                         class="btn btn-info"><i class="fa fa-edit"></i></a>
-                    <a type="button" data-bs-toggle="modal" data-bs-target="#deleteProductModal"
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#deleteProductModal{{ product.product_id }}"
                         class="btn btn-danger"><i class="fa fa-trash"></i></a>
                 </td>
                 <!-- modal Edit product -->
-                <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel"
+                <div class="modal fade" id="editProductModal{{ product.product_id }}" tabindex="-1" aria-labelledby="editProductModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -266,7 +266,7 @@
                 </div>
 
                 <!-- modal delete product -->
-                <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel"
+                <div class="modal fade" id="deleteProductModal{{ product.product_id }}" tabindex="-1" aria-labelledby="deleteProductModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">

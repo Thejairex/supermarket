@@ -110,11 +110,11 @@ def edit_product(product_id):
             product = db.get_record(Product, 'product_id', product_id)
             if request.method == 'POST':
                 product.product        = request.form['product']
-                product.category_id    = request.form['category_id']
+                product.category_id    = int(request.form['category_id'])
                 product.stand          = request.form['stand']
-                product.cost_unit      = request.form['cost_unit']
-                product.inflation_rate = request.form['inflation_rate']
-                product.price          = product.cost_unit * ( 1 + product.inflation_rate / 100) * 1.4
+                product.cost_unit      = float(request.form['cost_unit'])
+                product.inflation_rate = float(request.form['inflation_rate'])
+                product.price          = round(product.cost_unit * ( 1 + product.inflation_rate / 100) * 1.4, 1)
                 db.add(product)
                 
                 return redirect(url_for('products.products'))
