@@ -5,7 +5,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from DB import DB
 from DB.models import Category, Product, Box, User
 
-from blueprints import auth_bp, products_bp, user_bp
+from blueprints import auth_bp, products_bp, user_bp, play_bp
 
 app = Flask(__name__)
 db = DB()
@@ -21,6 +21,7 @@ with app.app_context():
 app.register_blueprint(auth_bp)
 app.register_blueprint(products_bp, url_prefix='/products')
 app.register_blueprint(user_bp, url_prefix='/')
+app.register_blueprint(play_bp, url_prefix='/play')
 
 @login_manger.user_loader
 def load_user(user_id):

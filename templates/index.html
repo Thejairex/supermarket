@@ -3,7 +3,7 @@
 {% block content %}
 
 <main>
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
     {% for message in messages %}
     {% if 'success' in message %}
@@ -60,15 +60,26 @@
                     </div>
                 </a>
             </div>
+            {% if current_user.is_authenticated %}
             <div class="col-4">
-                <a href="{{ url_for('user.profile') }}" class="text-decoration-none">
+                <a href="{{ url_for('play.play') }}" class="text-decoration-none">
                     <div class="card text-center text-primary rounded-4 bg-body-tertiary p-3 shadow-lg">
                         <div class="card-body">
-                            <h5 class="card-title display-5 m-0">Profile</h5>
+                            <h5 class="card-title display-5 m-0">Play</h5>
                         </div>
                     </div>
                 </a>
             </div>
+            {% else %}
+            <div class="col-4">
+                <a href="{{ url_for('auth.login') }}" class="text-decoration-none">
+                    <div class="card text-center text-primary rounded-4 bg-body-tertiary p-3 shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title display-5 m-0">Login</h5>
+                        </div>
+                    </div>
+                </a>
+            {% endif %}
         </div>
 
     </div>

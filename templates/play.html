@@ -1,0 +1,154 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<main class="container-fluid bg-dark pt-3" style="height: 100vh">
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <!-- if messages is error -->
+    {% if category == 'error' %}
+    <div class="alert alert-dismissible alert-danger" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        {{ message }}
+    </div>
+    {% endif %}
+
+    {% if category == 'success' %}
+    <div class="alert alert-dismissible alert-success" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        {{ message }}
+    </div>
+
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <!-- Add your content here -->
+    <div class="row bg-primary">
+        <div class="col-4 shadow-lg rounded-4">
+            <h3 class="text-center text-white pt-3">Records</h3>
+            {% if days|length != 0 %}
+
+            <table class="table table-striped table-hover table-sm text-start rounded-2">
+                <thead class="text-center align-middle">
+                    <tr>
+                        <th scope="col">Day</th>
+                        <th scope="col">Money Start</th>
+                        <th scope="col">Money End</th>
+                        <th scope="col">Money Profit</th>
+                        <th scope="col">Pct Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day in days %}
+                    <tr class="{% if day.profit > 0 %}table-success{% elif day.profit < 0 %}table-danger{% endif %}">
+                        <td class="text-nowrap">{{ day.day }}</td>
+                        <td class="t">{{ day.money_start }}</td>
+                        <td class="t">{{ day.money_end }}</td>
+                        <td class="t">{{ day.profit | round(2) }}</td>
+                        <td class="t">{{ (day.profit / day.money_start * 100) | round(2) }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+
+            <h3 class="text-center text-white">No records found</h3>
+
+            {% endif %}
+
+        </div>
+        <div class="col-4 shadow-lg rounded-4 p-3">
+            <form action="{{ url_for('play.play') }}" class="border border-1 border-dark rounded-2 p-3" method="POST">
+                <h3 class="text-center text-white">Day Datas</h3>
+                <div class="mb-3">
+                    <label for="day" class="form-label text-white">Day</label>
+                    <input type="number" class="form-control rounded-2" step="1" min="1" id="day" name="day" required>
+                </div>
+                <div class="mb-3">
+                    <label for="money_start" class="form-label text-white">Money Start</label>
+                    <input type="number" step="0.01" class="form-control rounded-2" id="money_start" name="money_start"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="money_end" class="form-label text-white">Money End</label>
+                    <input type="number" class="form-control rounded-2 " id="money_end" name="money_end" required>
+                </div>
+                <button type="submit" class="btn btn-success rounded-1 w-100">Save Day</button>
+            </form>
+        </div>
+        <div class="col-4 shadow-lg bg-primary rounded-4 p-3 m-0">
+            <h3 class="text-center text-white pt-3">Graph</h3>
+
+            {% if days|length != 0 %}
+
+            <div class="d-flex justify-content-center">
+                <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+            {% else %}
+
+            <h3 class="text-center text-white">No records found</h3>
+
+            {% endif %}
+
+        </div>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Obtener datos desde la plantilla
+    const labels = [
+        {% for day in days %}
+        "{{ day.day }}",
+        {% endfor %}
+    ];
+    
+    // Cargar los datos
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Money End',
+            data: [
+                {% for day in days %}
+                {{ day.money_end }},
+                {% endfor %}
+            ],
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            fill: true,
+            tension: 0.1
+        }]
+    };
+    
+    // Configuración del gráfico
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Day'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Money End'
+                    }
+                }
+            }
+        }
+    };
+    
+    // Renderizar el gráfico de línea en el canvas
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+</script>
+{% endblock content %}

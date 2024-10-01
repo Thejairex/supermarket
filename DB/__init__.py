@@ -86,7 +86,7 @@ class DB:
         query = self.session.query(model).filter(getattr(model, column) == value)
         
         if order_by:
-            query = self.__order_by(query, order_by, order)
+            query = self.__order_by(query, model, order_by, order)
         
         return query.all()
 

@@ -26,7 +26,13 @@
                         <!-- login justify to the right -->
                         </li>
                         {% if current_user.is_authenticated %}
-                            <!-- show username with icon and user dropdown menu -->
+                        <!-- Tools dropdown -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link me-auto p-2">Tools</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('statistics') }}" class="nav-link me-auto p-2">Statistics</a>
+                        </li>
                         <li class="nav-item ms-auto dropdown">
                             <a href="#" class="nav-link dropdown-toggle p-2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user"></i> {{ current_user.username }}
